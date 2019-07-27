@@ -10,6 +10,12 @@ This is the boilerplate for creating an API server in AdonisJs, it comes pre-con
 
 ## Setup
 
+Instalar o Adonis Globalmente:
+
+```bash
+npm i -g @adonisjs/cli
+```
+
 Use the adonis command to install the blueprint
 
 ```bash
