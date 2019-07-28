@@ -16,6 +16,12 @@ Instalar o Adonis Globalmente:
 npm i -g @adonisjs/cli
 ```
 
+Instalar as Dependências do Adonis:
+
+```bash
+npm i
+```
+
 Use the adonis command to install the blueprint
 
 ```bash
