@@ -1,7 +1,5 @@
 'use strict'
 
-const rotas = require("../config/rotas");
-
 /*
 |--------------------------------------------------------------------------
 | Websocket
@@ -17,6 +15,4 @@ const rotas = require("../config/rotas");
 
 const Ws = use('Ws')
 
-Ws.channel("*", ({ socket }) => {
-  console.log(socket.topic)
-})
+Ws.channel("*", 'MensageriaController')
