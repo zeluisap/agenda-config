@@ -13,7 +13,8 @@ This is the boilerplate for creating an API server in AdonisJs, it comes pre-con
 Instalar o Adonis Globalmente:
 
 ```bash
-npm i -g @adonisjs/cli
+sudo npm i -g @adonisjs/cli
+sudo npm i -g pm2
 ```
 
 Instalar as Dependências do Adonis:
@@ -38,3 +39,32 @@ Run the following command to run startup migrations.
 ```js
 adonis migration:run
 ```
+
+
+### PM2 Services
+
+Iniciar o serviço usando pm2 para gerenciar
+```bash
+sudo pm2 start server.js
+```
+
+Acompanhamento dos serviços executando atraves do pm2
+```bash
+sudo pm2 monit
+```
+
+Parar um serviço executando no pm2
+```bash
+sudo pm2 stop server
+```
+
+
+### Servidor produção
+
+Clone direto do projeto modificado apenas o arquivo `.env`
+
+Diretório padrão:
+```bash
+/home/desis/projetos/mensageria
+```
+
