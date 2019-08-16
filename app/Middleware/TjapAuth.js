@@ -23,6 +23,8 @@ class TjapAuth {
       token
     });
 
+    console.log({resposta});
+
     if (!(resposta && resposta.data && resposta.data.dados)) {
       return response.status(500).send("Falha de Autenticação!");
     }
