@@ -10,7 +10,7 @@ This is the boilerplate for creating an API server in AdonisJs, it comes pre-con
 
 ## Setup
 
-Instalar o Adonis Globalmente:
+Instalar o Adonis e PM2 Globalmente:
 
 ```bash
 sudo npm i -g @adonisjs/cli
