@@ -6,43 +6,81 @@
 const axios = require("../../config/axios");
 
 class TjapAuth {
+
   /**
    * @param {object} ctx
    * @param {Request} ctx.request
    * @param {Function} next
    */
-  async handle ({ request, response }, next) {
+  async handle (ctx, next) {
 
-    const token = request.header("Auth-Token");
+    const { request } = ctx;
+
+    const auth = await this.usuario(request);
+
+    if (auth) {
+      ctx.tjapauth = auth;
+    }
+
+    await next()
+  }
+
+  /**
+   * @param {object} ctx
+   * @param {Request} ctx.request
+   * @param {Function} next
+   */
+  async wsHandle (ctx, next) {
+
+    const { request } = ctx;
+
+    const auth = await this.usuario(request);
+
+    if (auth) {
+      ctx.tjapauth = auth;
+    }
+
+    await next()
+  }
+
+  getToken(request) {
+
+    let token = request.header("Auth-Token");
+
+    if (token) {
+      return token;
+    }
+
+    const params = request.all();
+
+    if (params && params.AuthToken) {
+      return params.AuthToken;
+    }
+
+    return null;
+
+  }
+
+  async usuario(request) {
+
+    const token = this.getToken(request);
 
     if (!token) {
-      return response.status(301).send("Informe o Token do Tucujuris!");
+      return null;
     }
 
     const resposta = await axios.post("/publico/restaurar-sessao", {
       token
     });
 
-    console.log({resposta});
-
     if (!(resposta && resposta.data && resposta.data.dados)) {
-      return response.status(500).send("Falha de Autenticação!");
+      return null;
     }
 
-    request.tjapauth = resposta.data.dados;
+    return resposta.data.dados;
 
-    await next()
   }
 
-  /**
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Function} next
-   */
-  async wsHandle ({ request }, next) {
-    // call next to advance the request
-    await next()
-  }
 }
 
 module.exports = TjapAuth

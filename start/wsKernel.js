@@ -31,7 +31,8 @@ const globalMiddleware = [
 | Ws.channel('chat', 'ChatController').middleware(['auth'])
 */
 const namedMiddleware = {
-  tjapauth: 'App/Middleware/TjapAuth'
+  tjap_auth: 'App/Middleware/TjapAuth',
+  tjap_auth_required: 'App/Middleware/TjapAuthRequired'
 }
 
 

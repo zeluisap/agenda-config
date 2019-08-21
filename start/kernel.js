@@ -37,7 +37,8 @@ const globalMiddleware = [
 const namedMiddleware = {
   auth: 'Adonis/Middleware/Auth',
   guest: 'Adonis/Middleware/AllowGuestOnly',
-  tjapauth: 'App/Middleware/TjapAuth'
+  tjap_auth: 'App/Middleware/TjapAuth',
+  tjap_auth_required: 'App/Middleware/TjapAuthRequired'
 }
 
 /*

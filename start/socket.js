@@ -15,4 +15,4 @@
 
 const Ws = use('Ws')
 
-Ws.channel("*", 'MensageriaController')
+Ws.channel("*", 'MensageriaController').middleware("tjap_auth")

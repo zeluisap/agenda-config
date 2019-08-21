@@ -16,4 +16,7 @@
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route')
 
-Route.post('/websocket', "WebsocketController.websocket").middleware('tjapauth')
+Route.post('/websocket', "WebsocketController.websocket").middleware([
+  "tjap_auth",
+  "tjap_auth_required"
+])
