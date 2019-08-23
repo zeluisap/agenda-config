@@ -20,3 +20,7 @@ Route.post('/websocket', "WebsocketController.websocket").middleware([
   "tjap_auth",
   "tjap_auth_required"
 ])
+
+Route.get('/websocket', "WebsocketController.report").middleware([
+  "tjap_auth"
+])
