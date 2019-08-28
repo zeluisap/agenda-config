@@ -16,11 +16,13 @@
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route')
 
-Route.post('/websocket', "WebsocketController.websocket").middleware([
-  "tjap_auth",
-  "tjap_auth_required"
-])
+Route.post('/log', "LogController.save")
+  // .middleware([
+  //   "tjap_log"
+  // ])
 
-Route.get('/websocket', "WebsocketController.report").middleware([
-  "tjap_auth"
-])
+Route.get('/log', "LogController.report")
+  // .middleware([
+  //   "tjap_auth",
+  //   "tjap_auth_required"
+  // ])

@@ -10,10 +10,7 @@
             "request": "attach",
             "name": "Debug Adonis App",
 
-            "port": 9229,
-
-            "localRoot": "${workspaceFolder}",
-            "remoteRoot": "/app"
+            "port": 9229
         }
     ]
 }
