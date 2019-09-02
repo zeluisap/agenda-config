@@ -58,13 +58,3 @@ Parar um serviço executando no pm2
 sudo pm2 stop server
 ```
 
-
-### Servidor produção
-
-Clone direto do projeto modificado apenas o arquivo `.env`
-
-Diretório padrão:
-```bash
-/home/desis/projetos/mensageria
-```
-
