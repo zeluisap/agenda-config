@@ -7,6 +7,7 @@ const Response = use("App/Models/Response");
 const Sessao = use("App/Models/Sessao");
 const Ip = use("App/Models/Ip");
 const Configuracao = use("App/Models/Configuracao");
+const Util = use("App/Js/Util");
 
 const moment = require("moment");
 
@@ -19,8 +20,8 @@ class LogService {
 
       const trilha = new Trilha();
 
-      const dataInicio = moment(params.request_inicio);
-      const dataFim = moment(params.request_fim);
+      const dataInicio = Util.getMoment(params.request_inicio);
+      const dataFim = Util.getMoment(params.request_fim);
 
       trilha.url = params.url;
       // trilha.ip = params.ip;
@@ -244,6 +245,66 @@ class LogService {
       await ip.save(trx);
     }
   }
+
+  static async report(ctx) {
+
+    const { page, perPage } = Util.getPagination(ctx);
+
+    return await Trilha
+      .query()
+      .orderBy('data_request', 'desc')
+      .paginate(page, perPage);
+
+  }
+
+  static async showTrilha(id) {
+
+    if (!id) {
+      throw new Error("Nenhuma Trilha Informada!");
+    }
+
+    const obj = await Trilha
+      .query()
+      .where('id', '=', id)
+      .first();
+
+    if (!obj) {
+      throw new Error("Nenhuma Trilha Informada!");
+    }
+
+    obj.request = await obj
+      .requests()
+      .orderBy('chave')
+      .fetch();
+
+    obj.sessao = await obj
+      .sessoes()
+      .orderBy('chave')
+      .fetch();
+
+    obj.ip = await obj
+      .ips()
+      .orderBy('chave')
+      .fetch();
+
+    return obj;
+  }
+
+  static async showResponse(id) {
+
+    if (!id) {
+      throw new Error("Nenhuma Trilha Informada!");
+    }
+
+    const objs = await Response
+      .query()
+      .where('fk_trilha', '=', id)
+      .orderBy('chave', 'asc')
+      .fetch();
+
+    return objs;
+  }
+
 }
 
 module.exports = LogService;

@@ -1,21 +1,44 @@
 "use strict";
 
 const LogService = use("App/Services/LogService");
+const Util = use('App/Js/Util');
 
 class LogController {
 
   async save(ctx) {
 
-    return await LogService.save(ctx);
+    return LogService.save(ctx);
 
   }
 
   async report(ctx) {
-    const { request, response } = ctx;
 
-    const params = request.all();
+    return LogService.report(ctx);
 
-    return params;
+  }
+
+  async showTrilha(ctx) {
+
+    const { params } = ctx;
+
+    if (!params.id) {
+      throw new Error("Nenhuma Sessão Informada!");
+    }
+
+    return LogService.showTrilha(params.id);
+
+  }
+
+  async showResponse(ctx) {
+
+    const { params } = ctx;
+
+    if (!params.id) {
+      throw new Error("Nenhuma Sessão Informada!");
+    }
+
+    return LogService.showResponse(params.id);
+
   }
 
 }

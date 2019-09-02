@@ -3,7 +3,7 @@ const env = use("Env");
 
 const obj = axios.create({
   baseURL: env.get('TJAP_BACKEND', 'http://10.10.50.224/back/api'),
-  timeout: 1000,
+  timeout: 2000,
   headers: {'X-Custom-Header': 'foobar'}
 });
 

@@ -17,12 +17,24 @@
 const Route = use('Route')
 
 Route.post('/log', "LogController.save")
-  // .middleware([
-  //   "tjap_log"
-  // ])
+  .middleware([
+    // "tjap_log"
+  ])
 
 Route.get('/log', "LogController.report")
-  // .middleware([
-  //   "tjap_auth",
-  //   "tjap_auth_required"
-  // ])
+  .middleware([
+    "tjap_auth",
+    "tjap_auth_required"
+  ])
+
+Route.get('/log/:id', "LogController.showTrilha")
+  .middleware([
+    "tjap_auth",
+    "tjap_auth_required"
+  ])
+
+Route.get('/log/:id/response', "LogController.showResponse")
+  .middleware([
+    "tjap_auth",
+    "tjap_auth_required"
+  ])
