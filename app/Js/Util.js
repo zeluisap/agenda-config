@@ -23,6 +23,31 @@ class Util {
     }
   }
 
+  static getFiltro(ctx) {
+    const { request } = ctx;
+
+    const params = request.all();
+
+    if (!(params && params.length)) {
+      return {};
+    }
+
+    const filters = [
+      'rota', 'ip','pessoa', 'especialidade', 'data_inicio', 'data_fim'
+    ];
+
+    let retorno = {};
+
+    for (const filter of filters) {
+      if (!params.hasOwnProperty(filter)) {
+        continue;
+      }
+      retorno[filter] = params[filter];
+    }
+
+    return retorno;
+  }
+
   static getPagination(ctx) {
     const { request } = ctx;
 

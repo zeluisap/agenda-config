@@ -246,22 +246,49 @@ class LogService {
   }
 
   static async report(ctx) {
-    const { page, perPage } = Util.getPagination(ctx);
+
     let { order_key, order_reverse } = ctx.request.all();
 
     if (!order_key) {
-      order_key = "data_request";
+      order_key = 'data_request';
+      order_reverse = 'desc';
     }
 
-    if (order_reverse) {
-      order_reverse = order_reverse;
-    } else {
-      order_reverse = "asc";
+    if (!order_reverse) {
+      order_reverse = 'asc';
     }
 
-    return await Trilha.query()
+    const { page, perPage } = Util.getPagination(ctx);
+    const { rota, ip, pessoa, especialidade, data_ini, data_fim } = Util.getFiltro(ctx);
+
+    return await Trilha
+      .query()
+      .where(function() {
+
+        if(rota){
+          this.where('rota', 'like', '%'+rota+'%')
+        }
+
+        if(ip){
+          this.where('ip', 'like', '%'+ip+'%')
+        }
+
+        if(pessoa){
+          this.where('pessoa', 'like', '%'+pessoa+'%')
+        }
+
+        if(especialidade){
+          this.where('especialidade', 'like', '%'+especialidade+'%')
+        }
+
+        if(data_ini && data_fim){
+          this.whereBetween('data_request', [ data_ini, data_fim ])
+        }
+
+      })
       .orderBy(order_key, order_reverse)
       .paginate(page, perPage);
+
   }
 
   static async showTrilha(id) {
