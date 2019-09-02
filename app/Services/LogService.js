@@ -186,7 +186,6 @@ class LogService {
   }
 
   static async salvarResponse({ response, trilha, trx, config, namespace }) {
-
     if (config && !config.logar_resposta) {
       return null;
     }
@@ -247,25 +246,31 @@ class LogService {
   }
 
   static async report(ctx) {
-
     const { page, perPage } = Util.getPagination(ctx);
+    let { order_key, order_reverse } = ctx.request.all();
 
-    return await Trilha
-      .query()
-      .orderBy('data_request', 'desc')
+    if (!order_key) {
+      order_key = "data_request";
+    }
+
+    if (order_reverse) {
+      order_reverse = order_reverse;
+    } else {
+      order_reverse = "asc";
+    }
+
+    return await Trilha.query()
+      .orderBy(order_key, order_reverse)
       .paginate(page, perPage);
-
   }
 
   static async showTrilha(id) {
-
     if (!id) {
       throw new Error("Nenhuma Trilha Informada!");
     }
 
-    const obj = await Trilha
-      .query()
-      .where('id', '=', id)
+    const obj = await Trilha.query()
+      .where("id", "=", id)
       .first();
 
     if (!obj) {
@@ -274,37 +279,34 @@ class LogService {
 
     obj.request = await obj
       .requests()
-      .orderBy('chave')
+      .orderBy("chave")
       .fetch();
 
     obj.sessao = await obj
       .sessoes()
-      .orderBy('chave')
+      .orderBy("chave")
       .fetch();
 
     obj.ip = await obj
       .ips()
-      .orderBy('chave')
+      .orderBy("chave")
       .fetch();
 
     return obj;
   }
 
   static async showResponse(id) {
-
     if (!id) {
       throw new Error("Nenhuma Trilha Informada!");
     }
 
-    const objs = await Response
-      .query()
-      .where('fk_trilha', '=', id)
-      .orderBy('chave', 'asc')
+    const objs = await Response.query()
+      .where("fk_trilha", "=", id)
+      .orderBy("chave", "asc")
       .fetch();
 
     return objs;
   }
-
 }
 
 module.exports = LogService;
