@@ -250,8 +250,28 @@ class LogService {
 
     const { page, perPage } = Util.getPagination(ctx);
 
+    const { rota, ip, pessoa, especialidade, data_ini, data_fim } = Util.getFiltro(ctx);
+
     return await Trilha
       .query()
+      .where(function(){
+        this.where('1','=','1')
+        if(rota){
+          this.where('rota', 'like', '%'+rota+'%')
+        }
+        if(ip){
+          this.where('ip', 'like', '%'+ip+'%')
+        }
+        if(pessoa){
+          this.where('pessoa', 'like', '%'+pessoa+'%')
+        }
+        if(especialidade){
+          this.where('especialidade', 'like', '%'+especialidade+'%')
+        }
+        if(data_ini && data_fim){
+          this.whereBetween('data_request', [ data_ini, data_fim ])
+        }
+      })
       .orderBy('data_request', 'desc')
       .paginate(page, perPage);
 

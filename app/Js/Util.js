@@ -23,6 +23,46 @@ class Util {
     }
   }
 
+  static getFiltro(ctx) {
+    const { request } = ctx;
+
+    const params = request.all();
+
+    let
+      rota = null,
+      ip = null,
+      pessoa = null,
+      especialidade = null,
+      data_inicio = null,
+      data_fim = null;
+
+      if(params){
+        if(params.rota){
+          rota = params.rota;
+        }
+
+        if(params.ip){
+          ip = params.ip;
+        }
+
+        if(params.pessoa){
+          pessoa = params.pessoa;
+        }
+
+        if(params.especialidade){
+          especialidade = params.especialidade;
+        }
+
+        if(params.data_inicio && params.data_fim){
+          data_inicio = params.data_inicio;
+          data_fim = params.data_fim;
+        }
+
+      }
+
+      return rota, ip, pessoa, especialidade, data_inicio, data_fim;
+  }
+
   static getPagination(ctx) {
     const { request } = ctx;
 
