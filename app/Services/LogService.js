@@ -247,7 +247,7 @@ class LogService {
 
   static async report(ctx) {
 
-    let { order_key, order_reverse } = ctx.request.all();
+    let { order_key, order_reverse, rota, ip, pessoa, especialidade, data_ini, data_fim } = ctx.request.all();
 
     if (!order_key) {
       order_key = 'data_request';
@@ -259,30 +259,30 @@ class LogService {
     }
 
     const { page, perPage } = Util.getPagination(ctx);
-    const { rota, ip, pessoa, especialidade, data_ini, data_fim } = Util.getFiltro(ctx);
+    //const { rota, ip, pessoa, especialidade, data_inicio, data_fim } = Util.getFiltro(ctx);
 
     return await Trilha
       .query()
       .where(function() {
 
         if(rota){
-          this.where('rota', 'like', '%'+rota+'%')
+          this.whereRaw("upper(rota) LIKE '%' || upper(?) || '%' ",rota.toUpperCase())
         }
 
         if(ip){
-          this.where('ip', 'like', '%'+ip+'%')
+          this.whereRaw("upper(ip) LIKE '%' || upper(?) || '%' ",ip.toUpperCase())
         }
 
         if(pessoa){
-          this.where('pessoa', 'like', '%'+pessoa+'%')
+          this.whereRaw("upper(pessoa) LIKE '%' || upper(?) || '%' ",pessoa.toUpperCase())
         }
 
         if(especialidade){
-          this.where('especialidade', 'like', '%'+especialidade+'%')
+          this.whereRaw("upper(especialidade) LIKE '%' || upper(?) || '%' ",especialidade.toUpperCase())
         }
 
         if(data_ini && data_fim){
-          this.whereBetween('data_request', [ data_ini, data_fim ])
+          this.whereRaw("TO_CHAR(data_request, 'dd/mm/yyyy') between ? and ?",[data_ini, data_fim])
         }
 
       })

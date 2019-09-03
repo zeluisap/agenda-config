@@ -36,7 +36,7 @@ class Util {
       'rota', 'ip','pessoa', 'especialidade', 'data_inicio', 'data_fim'
     ];
 
-    let retorno = {};
+    let retorno = [];
 
     for (const filter of filters) {
       if (!params.hasOwnProperty(filter)) {
