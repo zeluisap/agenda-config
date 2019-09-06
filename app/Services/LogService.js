@@ -247,8 +247,7 @@ class LogService {
 
   static async report(ctx) {
 
-    let { order_key, order_reverse, rota, ip, pessoa, especialidade, data_ini, data_fim } = ctx.request.all();
-
+    let { order_key, order_reverse, rota, pessoa, especialidade, data_ini, data_fim, texto } = ctx.request.all();
     if (!order_key) {
       order_key = 'data_request';
       order_reverse = 'desc';
@@ -259,7 +258,6 @@ class LogService {
     }
 
     const { page, perPage } = Util.getPagination(ctx);
-    //const { rota, ip, pessoa, especialidade, data_inicio, data_fim } = Util.getFiltro(ctx);
 
     return await Trilha
       .query()
@@ -267,10 +265,6 @@ class LogService {
 
         if(rota){
           this.whereRaw("upper(rota) LIKE '%' || upper(?) || '%' ",rota.toUpperCase())
-        }
-
-        if(ip){
-          this.whereRaw("upper(ip) LIKE '%' || upper(?) || '%' ",ip.toUpperCase())
         }
 
         if(pessoa){
@@ -283,6 +277,10 @@ class LogService {
 
         if(data_ini && data_fim){
           this.whereRaw("TO_CHAR(data_request, 'dd/mm/yyyy') between ? and ?",[data_ini, data_fim])
+        }
+
+        if(texto){
+          this.whereRaw("upper(rota) ||' '|| upper(especialidade) ||' '|| upper(pessoa) ||' '|| TO_CHAR(data_request, 'dd/mm/yyyy') LIKE '%' || upper(?) || '%' ",texto.toUpperCase())
         }
 
       })
