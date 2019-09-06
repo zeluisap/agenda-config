@@ -78,6 +78,27 @@ class Util {
 
   static getMoment(strDateTime) {
     try {
+
+      strDateTime = this.getStringDate(strDateTime);
+
+      if (!strDateTime) {
+        return null;
+      }
+
+      return moment(strDateTime);
+
+    } catch (error) {
+      console.error({
+        strDateTime,
+        error: error.message
+      });
+      return null;
+    }
+  }
+
+  static getStringDate(strDateTime) {
+
+    try {
       if (!(strDateTime && strDateTime.trim())) {
         return null;
       }
@@ -95,26 +116,26 @@ class Util {
       }
 
       if (partes.length === 1) {
-        return moment(strDateTime);
+        return strDateTime;
       }
 
       let timePartes = partes[1].split(":");
       if (!(timePartes && timePartes.length)) {
-        return moment(partes[0]);
+        return partes[0];
       }
 
       if (timePartes.length > 4) {
-        return moment(partes[0]);
+        return partes[0];
       }
 
       if (timePartes.length < 4) {
-        return moment(strDateTime);
+        return strDateTime;
       }
 
       //timepartes.length === 4
       let micro = timePartes[3];
       if (micro.length <= 4) {
-        return moment(strDateTime);
+        return strDateTime;
       }
       micro = micro.substring(0, 4);
 
@@ -123,14 +144,11 @@ class Util {
 
       const strTempo = partes[0] + " " + timePartes.join(":") + "." + micro;
 
-      return moment(strTempo);
+      return strTempo;
     } catch (error) {
-      console.error({
-        strDateTime,
-        error: error.message
-      });
       return null;
     }
+
   }
 }
 

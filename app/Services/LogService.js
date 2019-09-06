@@ -20,8 +20,8 @@ class LogService {
 
       const trilha = new Trilha();
 
-      const dataInicio = Util.getMoment(params.request_inicio);
-      const dataFim = Util.getMoment(params.request_fim);
+      const dataInicio = Util.getStringDate(params.request_inicio);
+      const dataFim = Util.getStringDate(params.request_fim);
 
       trilha.url = params.url;
       // trilha.ip = params.ip;
