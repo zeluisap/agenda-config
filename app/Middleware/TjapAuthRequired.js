@@ -26,7 +26,7 @@ class TjapAuthRequired {
   async wsHandle ({ request, tjapauth }, next) {
 
     if (!tjapauth) {
-      throw new Error("Falha ao Autenticar!");
+      // throw new Error("Falha ao Autenticar!");
     }
 
     await next()
