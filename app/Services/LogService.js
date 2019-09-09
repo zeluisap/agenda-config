@@ -247,7 +247,7 @@ class LogService {
 
   static async report(ctx) {
 
-    let { order_key, order_reverse, rota, pessoa, especialidade, data_ini, data_fim, texto } = ctx.request.all();
+    let { order_key, order_reverse, rota, pessoa, especialidade, data_ini, data_fim, texto, status } = ctx.request.all();
     if (!order_key) {
       order_key = 'data_request';
       order_reverse = 'desc';
@@ -257,10 +257,17 @@ class LogService {
       order_reverse = 'asc';
     }
 
+    if (!status) {
+      status = 'OK';
+    }
+
     const { page, perPage } = Util.getPagination(ctx);
 
-    return await Trilha
-      .query()
+    return await Trilha.query()
+      .distinct("trilha.id")
+      .select("trilha.*")
+      .from("trilha")
+      .joinRaw("inner join response on response.fk_trilha = trilha.id and response.valor in ('"+status+"')")
       .where(function() {
 
         if(rota){
@@ -286,7 +293,6 @@ class LogService {
       })
       .orderBy(order_key, order_reverse)
       .paginate(page, perPage);
-
   }
 
   static async showTrilha(id) {
