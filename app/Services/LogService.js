@@ -245,6 +245,21 @@ class LogService {
     }
   }
 
+  static async grafico(ctx) {
+    let { tipo_grafico, data_ini, data_fim, status } = ctx.request.all();
+
+    return await Trilha.query()
+    .select("trilha.*")
+    .from("trilha")
+    .where(function(){
+      //if(tipo_grafico==='acesso'){
+        this.whereRaw("TO_CHAR(data_request, 'dd/mm/yyyy') between ? and ?",[data_ini, data_fim])
+      //}
+    })
+    .groupBy("TO_CHAR(data_request, 'dd/mm/yyyy')")
+    .orderBy("data_request desc");
+  }
+
   static async report(ctx) {
 
     let { order_key, order_reverse, rota, pessoa, especialidade, data_ini, data_fim, texto, status } = ctx.request.all();

@@ -27,6 +27,12 @@ Route.get('/log', "LogController.report")
     "tjap_auth_required"
   ])
 
+Route.get('/log/grafico', "LogController.grafico")
+  .middleware([
+    "tjap_auth",
+    "tjap_auth_required"
+  ])
+
 Route.get('/log/:id', "LogController.showTrilha")
   .middleware([
     "tjap_auth",
