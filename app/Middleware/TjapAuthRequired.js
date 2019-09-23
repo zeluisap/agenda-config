@@ -12,7 +12,7 @@ class TjapAuthRequired {
   async handle ({ request, response, tjapauth }, next) {
 
     if (!tjapauth) {
-      return response.status(301).send("Falha ao Autenticar!");
+      //return response.status(301).send("Falha ao Autenticar!");
     }
 
     await next()

@@ -12,6 +12,12 @@ class LogController {
     return LogService.report(ctx);
   }
 
+  async grafico(ctx) {
+
+    return LogService.grafico(ctx);
+
+  }
+
   async showTrilha(ctx) {
     const { params } = ctx;
 

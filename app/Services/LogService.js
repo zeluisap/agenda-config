@@ -270,18 +270,36 @@ class LogService {
     }
   }
 
+  static async grafico(ctx) {
+    let { tipo_grafico, data_ini, data_fim, status } = ctx.request.all();
+
+    return await Trilha.query()
+      .select("trilha.*")
+      .from("trilha")
+      .where(function() {
+        //if(tipo_grafico==='acesso'){
+        this.whereRaw("TO_CHAR(data_request, 'dd/mm/yyyy') between ? and ?", [
+          data_ini,
+          data_fim
+        ]);
+        //}
+      })
+      .groupBy("TO_CHAR(data_request, 'dd/mm/yyyy')")
+      .orderBy("data_request desc");
+  }
+
   static async report(ctx) {
     let {
       order_key,
       order_reverse,
       rota,
-      ip,
       pessoa,
       especialidade,
       data_ini,
-      data_fim
+      data_fim,
+      texto,
+      status
     } = ctx.request.all();
-
     if (!order_key) {
       order_key = "data_request";
       order_reverse = "desc";
@@ -291,22 +309,26 @@ class LogService {
       order_reverse = "asc";
     }
 
+    if (!status) {
+      status = "OK";
+    }
+
     const { page, perPage } = Util.getPagination(ctx);
-    //const { rota, ip, pessoa, especialidade, data_inicio, data_fim } = Util.getFiltro(ctx);
 
     return await Trilha.query()
+      .distinct("trilha.id")
+      .select("trilha.*")
+      .from("trilha")
+      .joinRaw(
+        "inner join response on response.fk_trilha = trilha.id and response.valor in ('" +
+          status +
+          "')"
+      )
       .where(function() {
         if (rota) {
           this.whereRaw(
             "upper(rota) LIKE '%' || upper(?) || '%' ",
             rota.toUpperCase()
-          );
-        }
-
-        if (ip) {
-          this.whereRaw(
-            "upper(ip) LIKE '%' || upper(?) || '%' ",
-            ip.toUpperCase()
           );
         }
 
@@ -329,6 +351,13 @@ class LogService {
             data_ini,
             data_fim
           ]);
+        }
+
+        if (texto) {
+          this.whereRaw(
+            "upper(rota) ||' '|| upper(especialidade) ||' '|| upper(pessoa) ||' '|| TO_CHAR(data_request, 'dd/mm/yyyy') LIKE '%' || upper(?) || '%' ",
+            texto.toUpperCase()
+          );
         }
       })
       .orderBy(order_key, order_reverse)
