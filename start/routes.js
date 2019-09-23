@@ -1,4 +1,4 @@
-'use strict'
+"use strict";
 
 /*
 |--------------------------------------------------------------------------
@@ -14,27 +14,28 @@
 */
 
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
-const Route = use('Route')
+const Route = use("Route");
 
-Route.post('/log', "LogController.save")
-  .middleware([
-    // "tjap_log"
-  ])
+Route.post("/log", "LogController.save").middleware([
+  // "tjap_log"
+]);
 
-Route.get('/log', "LogController.report")
-  .middleware([
-    "tjap_auth",
-    "tjap_auth_required"
-  ])
+Route.get("/log", "LogController.report").middleware([
+  "tjap_auth",
+  "tjap_auth_required"
+]);
 
-Route.get('/log/:id', "LogController.showTrilha")
-  .middleware([
-    "tjap_auth",
-    "tjap_auth_required"
-  ])
+Route.get("/log/:id", "LogController.showTrilha").middleware([
+  "tjap_auth",
+  "tjap_auth_required"
+]);
 
-Route.get('/log/:id/response', "LogController.showResponse")
-  .middleware([
-    "tjap_auth",
-    "tjap_auth_required"
-  ])
+Route.get("/log/:id/response", "LogController.showResponse").middleware([
+  "tjap_auth",
+  "tjap_auth_required"
+]);
+
+Route.resource("config", "ConfiguracaoController").middleware([
+  "tjap_auth",
+  "tjap_auth_required"
+]);

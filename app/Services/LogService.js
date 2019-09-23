@@ -101,7 +101,7 @@ class LogService {
     const props = Object.keys(sessao);
 
     for (const prop of props) {
-      const valor = sessao[prop];
+      let valor = sessao[prop];
 
       if (!valor) {
         continue;
@@ -109,7 +109,9 @@ class LogService {
 
       const fullPropName = (namespace ? namespace + "." : "") + prop;
 
-      if (typeof valor === "object") {
+      if (fullPropName === "permissoes") {
+        valor = valor.sort().join(", ");
+      } else if (typeof valor === "object") {
         await this.salvarSessao({
           sessao: valor,
           trilha,
@@ -119,10 +121,33 @@ class LogService {
         continue;
       }
 
+      const salvar_apenas = [
+        "comarca.id",
+        "comarca.descricao",
+        "especialidade.id",
+        "especialidade.assinatura",
+        "especialidade.matricula",
+        "especialidade.tipo_especialidade",
+        "especialidade.login_exclusivo",
+        "lotacao.id",
+        "lotacao.descricao",
+        "pessoa.id",
+        "pessoa.nome",
+        "permissoes",
+        "token"
+      ];
+
+      const deve_salvar = salvar_apenas.some(
+        item => fullPropName.toLowerCase() === item.toLowerCase()
+      );
+      if (!deve_salvar) {
+        continue;
+      }
+
       const s = new Sessao();
       s.fk_trilha = trilha.id;
       s.chave = fullPropName;
-      s.valor = sessao[prop];
+      s.valor = valor;
       await s.save(trx);
     }
   }
@@ -246,49 +271,68 @@ class LogService {
   }
 
   static async report(ctx) {
-
-    let { order_key, order_reverse, rota, ip, pessoa, especialidade, data_ini, data_fim } = ctx.request.all();
+    let {
+      order_key,
+      order_reverse,
+      rota,
+      ip,
+      pessoa,
+      especialidade,
+      data_ini,
+      data_fim
+    } = ctx.request.all();
 
     if (!order_key) {
-      order_key = 'data_request';
-      order_reverse = 'desc';
+      order_key = "data_request";
+      order_reverse = "desc";
     }
 
     if (!order_reverse) {
-      order_reverse = 'asc';
+      order_reverse = "asc";
     }
 
     const { page, perPage } = Util.getPagination(ctx);
     //const { rota, ip, pessoa, especialidade, data_inicio, data_fim } = Util.getFiltro(ctx);
 
-    return await Trilha
-      .query()
+    return await Trilha.query()
       .where(function() {
-
-        if(rota){
-          this.whereRaw("upper(rota) LIKE '%' || upper(?) || '%' ",rota.toUpperCase())
+        if (rota) {
+          this.whereRaw(
+            "upper(rota) LIKE '%' || upper(?) || '%' ",
+            rota.toUpperCase()
+          );
         }
 
-        if(ip){
-          this.whereRaw("upper(ip) LIKE '%' || upper(?) || '%' ",ip.toUpperCase())
+        if (ip) {
+          this.whereRaw(
+            "upper(ip) LIKE '%' || upper(?) || '%' ",
+            ip.toUpperCase()
+          );
         }
 
-        if(pessoa){
-          this.whereRaw("upper(pessoa) LIKE '%' || upper(?) || '%' ",pessoa.toUpperCase())
+        if (pessoa) {
+          this.whereRaw(
+            "upper(pessoa) LIKE '%' || upper(?) || '%' ",
+            pessoa.toUpperCase()
+          );
         }
 
-        if(especialidade){
-          this.whereRaw("upper(especialidade) LIKE '%' || upper(?) || '%' ",especialidade.toUpperCase())
+        if (especialidade) {
+          this.whereRaw(
+            "upper(especialidade) LIKE '%' || upper(?) || '%' ",
+            especialidade.toUpperCase()
+          );
         }
 
-        if(data_ini && data_fim){
-          this.whereRaw("TO_CHAR(data_request, 'dd/mm/yyyy') between ? and ?",[data_ini, data_fim])
+        if (data_ini && data_fim) {
+          this.whereRaw("TO_CHAR(data_request, 'dd/mm/yyyy') between ? and ?", [
+            data_ini,
+            data_fim
+          ]);
         }
-
       })
       .orderBy(order_key, order_reverse)
       .paginate(page, perPage);
-
   }
 
   static async showTrilha(id) {
