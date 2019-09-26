@@ -5,9 +5,24 @@ const Configuracao = use("App/Models/Configuracao");
 const Util = use("App/Js/Util");
 
 class ConfiguracaoService {
+
   static async listar(ctx) {
     const { request } = ctx;
     const { page, perPage } = Util.getPagination(ctx);
+
+    let {
+      order_key,
+      order_reverse
+    } = request.all();
+
+    if (!order_key) {
+      order_key = "id";
+      order_reverse = "desc";
+    }
+
+    if (!order_reverse) {
+      order_reverse = "asc";
+    }
 
     return Configuracao.query()
       .where(function() {
@@ -16,10 +31,16 @@ class ConfiguracaoService {
           this.where("rota", "=", rota);
         }
       })
+      .orderBy(order_key, order_reverse)
       .paginate(page, perPage);
   }
 
+  static async getConfig(id) {
+    return await Configuracao.find(parseInt(id))
+  }
+
   static async salvar(fields) {
+    console.log(fields);
     let config = null;
 
     if (fields.id) {
@@ -31,6 +52,8 @@ class ConfiguracaoService {
     }
 
     config.fill(fields);
+
+    console.log(config);
 
     const id = config.id ? config.id : 0;
 
