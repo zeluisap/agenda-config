@@ -8,7 +8,13 @@ class ConfiguracaoController {
     return ConfiguracaoService.listar(ctx);
   }
 
-  async show(ctx) {}
+  async show(ctx) {
+
+    const { request } = ctx;
+    const { id } = request.params;
+
+    return ConfiguracaoService.getConfig(id);
+  }
 
   async store(ctx) {
     const { request } = ctx;
