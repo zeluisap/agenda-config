@@ -82,11 +82,11 @@ class LogService {
           trx
         });
       });
+
+      return trilha;
     } catch (error) {
       console.error(error);
     }
-
-    return trilha;
   }
 
   static async salvarSessao({ sessao, trilha, trx, namespace }) {
@@ -262,11 +262,21 @@ class LogService {
         continue;
       }
 
-      const ip = new Ip();
-      ip.fk_trilha = trilha.id;
-      ip.chave = prop;
-      ip.valor = params.ip[prop];
-      await ip.save(trx);
+      if (!Array.isArray(valor)) {
+        valor = [ valor ];
+      }
+
+
+      valor.forEach(item => {
+
+        const ip = new Ip();
+        ip.fk_trilha = trilha.id;
+        ip.chave = prop;
+        ip.valor = item;
+        await ip.save(trx);
+
+      });
+
     }
   }
 
