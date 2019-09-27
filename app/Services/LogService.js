@@ -263,20 +263,16 @@ class LogService {
       }
 
       if (!Array.isArray(valor)) {
-        valor = [ valor ];
+        valor = [valor];
       }
 
-
-      valor.forEach(item => {
-
+      for (const vlr of valor) {
         const ip = new Ip();
         ip.fk_trilha = trilha.id;
         ip.chave = prop;
-        ip.valor = item;
+        ip.valor = vlr;
         await ip.save(trx);
-
-      });
-
+      }
     }
   }
 
