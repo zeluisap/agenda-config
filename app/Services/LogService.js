@@ -322,14 +322,6 @@ class LogService {
     const { page, perPage } = Util.getPagination(ctx);
 
     return await Trilha.query()
-      .distinct("trilha.id")
-      .select("trilha.*")
-      .from("trilha")
-      .joinRaw(
-        "inner join response on response.fk_trilha = trilha.id and response.valor in ('" +
-          status +
-          "')"
-      )
       .where(function() {
         if (rota) {
           this.whereRaw(
