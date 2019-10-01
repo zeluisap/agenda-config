@@ -345,10 +345,7 @@ class LogService {
         }
 
         if (data_ini && data_fim) {
-          this.whereRaw("TO_CHAR(data_request, 'dd/mm/yyyy') between ? and ?", [
-            data_ini,
-            data_fim
-          ]);
+          this.whereRaw("data_request between ? and ?", [data_ini, data_fim]);
         }
 
         if (texto) {
@@ -359,6 +356,7 @@ class LogService {
         }
       })
       .orderBy(order_key, order_reverse)
+      .on("query", console.log)
       .paginate(page, perPage);
   }
 

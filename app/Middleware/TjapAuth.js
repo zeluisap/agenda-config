@@ -1,4 +1,4 @@
-'use strict'
+"use strict";
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
@@ -6,23 +6,20 @@
 const axios = require("../../config/axios");
 
 class TjapAuth {
-
   /**
    * @param {object} ctx
    * @param {Request} ctx.request
    * @param {Function} next
    */
-  async handle (ctx, next) {
-
+  async handle(ctx, next) {
     const { request } = ctx;
 
-    const auth = await this.usuario(request);
+    // const auth = await this.usuario(request);
+    // if (auth) {
+    //   ctx.tjapauth = auth;
+    // }
 
-    if (auth) {
-      ctx.tjapauth = auth;
-    }
-
-    await next()
+    await next();
   }
 
   /**
@@ -30,21 +27,18 @@ class TjapAuth {
    * @param {Request} ctx.request
    * @param {Function} next
    */
-  async wsHandle (ctx, next) {
-
+  async wsHandle(ctx, next) {
     const { request } = ctx;
 
-    const auth = await this.usuario(request);
+    // const auth = await this.usuario(request);
+    // if (auth) {
+    //   ctx.tjapauth = auth;
+    // }
 
-    if (auth) {
-      ctx.tjapauth = auth;
-    }
-
-    await next()
+    await next();
   }
 
   getToken(request) {
-
     let token = request.header("Auth-Token");
 
     if (token) {
@@ -58,11 +52,9 @@ class TjapAuth {
     }
 
     return null;
-
   }
 
   async usuario(request) {
-
     const token = this.getToken(request);
 
     if (!token) {
@@ -78,9 +70,7 @@ class TjapAuth {
     }
 
     return resposta.data.dados;
-
   }
-
 }
 
-module.exports = TjapAuth
+module.exports = TjapAuth;
