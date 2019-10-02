@@ -13,9 +13,7 @@ class LogController {
   }
 
   async grafico(ctx) {
-
     return LogService.grafico(ctx);
-
   }
 
   async showTrilha(ctx) {

@@ -8,6 +8,7 @@ const Sessao = use("App/Models/Sessao");
 const Ip = use("App/Models/Ip");
 const Configuracao = use("App/Models/Configuracao");
 const Util = use("App/Js/Util");
+const configService = use("App/Services/ConfiguracaoService");
 
 const moment = require("moment");
 
@@ -17,6 +18,19 @@ class LogService {
       const { request } = ctx;
 
       const params = request.all();
+
+      // let log = {
+      //   rota: params.rota,
+      //   request: params.request
+      // };
+
+      // if (params.sessao && params.sessao.pessoa && params.sessao.pessoa.nome) {
+      //   log.usuario = params.sessao.pessoa.nome;
+      // }
+
+      // console.log({
+      //   log
+      // });
 
       const trilha = new Trilha();
 
@@ -51,15 +65,13 @@ class LogService {
         }
       }
 
-      const config = await Configuracao.query()
-        .where("rota", "=", trilha.rota)
-        .first();
-
-      if (config && !config.logar) {
-        return;
-      }
-
       await Database.transaction(async trx => {
+        const config = this.getConfig(trilha);
+
+        if (config && !config.logar) {
+          return;
+        }
+
         await trilha.save(trx);
 
         await this.salvarRequest({
@@ -69,12 +81,14 @@ class LogService {
           config
         });
 
-        await this.salvarResponse({
-          response: params.response,
-          trilha,
-          trx,
-          config
-        });
+        if (config.logar_resposta) {
+          await this.salvarResponse({
+            response: params.response,
+            trilha,
+            trx,
+            config
+          });
+        }
 
         await this.salvarSessao({
           sessao,
@@ -399,7 +413,7 @@ class LogService {
 
   static async showResponse(id) {
     if (!id) {
-      throw new Error("Nenhuma Trilha Informada!");
+      throw new Error("Nenhuma trilha informada!");
     }
 
     const objs = await Response.query()
@@ -408,6 +422,38 @@ class LogService {
       .fetch();
 
     return objs;
+  }
+
+  static async getConfig(trilha) {
+    if (!trilha.rota) {
+      return {
+        logar: false
+      };
+    }
+
+    let config = await Configuracao.query()
+      .whereRaw("lower(rota) = ?", trilha.rota.toLowerCase())
+      .first();
+
+    if (config) {
+      return config;
+    }
+
+    return await this.criaConfig(trilha);
+  }
+
+  static async criaConfig(trilha) {
+    if (!(trilha && trilha.rota)) {
+      return {
+        logar: false
+      };
+    }
+
+    return configService.salvar({
+      rota: trilha.rota,
+      logar: true,
+      logar_resposta: false
+    });
   }
 }
 

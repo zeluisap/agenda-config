@@ -57,7 +57,7 @@ class ConfiguracaoService {
       .first()).count;
 
     if (parseInt(quantidade)) {
-      throw new Error("Falha! Rota Já Cadastrada!");
+      throw new Error("Falha! Rota já cadastrada!");
     }
 
     config.save();
