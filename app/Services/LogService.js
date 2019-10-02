@@ -449,7 +449,7 @@ class LogService {
       };
     }
 
-    return configService.salvar({
+    return await configService.salvar({
       rota: trilha.rota,
       logar: true,
       logar_resposta: false
