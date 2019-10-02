@@ -29,6 +29,12 @@ class LogService {
       trilha.data_request = dataInicio;
       trilha.data_response = dataFim;
 
+      trilha.sucesso =
+        params &&
+        params.response &&
+        params.response.status &&
+        params.response.status.toLowerCase() === "ok";
+
       const sessao = params.sessao;
 
       if (sessao) {
@@ -315,10 +321,6 @@ class LogService {
       order_reverse = "asc";
     }
 
-    if (!status) {
-      status = "OK";
-    }
-
     const { page, perPage } = Util.getPagination(ctx);
 
     return await Trilha.query()
@@ -353,6 +355,10 @@ class LogService {
             "upper(rota) ||' '|| upper(especialidade) ||' '|| upper(pessoa) ||' '|| TO_CHAR(data_request, 'dd/mm/yyyy') LIKE '%' || upper(?) || '%' ",
             texto.toUpperCase()
           );
+        }
+
+        if (status !== null && status !== undefined) {
+          this.whereRaw("sucesso = ?", JSON.parse(status));
         }
       })
       .orderBy(order_key, order_reverse)
