@@ -51,7 +51,7 @@ class ConfiguracaoService {
     const id = config.id ? config.id : 0;
 
     const quantidade = (await Configuracao.query()
-      .where("rota", "=", config.rota)
+      .whereRaw("lower(rota) = ?", config.rota)
       .where("id", "<>", id)
       .count()
       .first()).count;
@@ -60,7 +60,7 @@ class ConfiguracaoService {
       throw new Error("Falha! Rota já cadastrada!");
     }
 
-    config.save();
+    await config.save();
 
     return config;
   }

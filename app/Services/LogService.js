@@ -66,7 +66,7 @@ class LogService {
       }
 
       await Database.transaction(async trx => {
-        const config = this.getConfig(trilha);
+        const config = await this.getConfig(trilha);
 
         if (config && !config.logar) {
           return;
