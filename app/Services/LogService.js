@@ -21,7 +21,7 @@ class LogService {
 
       if (params.request) {
         const tamanho = Util.getBinarySize(params.request);
-        if (tamanho > 1000000) {
+        if (tamanho > 10000) {
           console.log({
             request: params.request,
             erro: "Muitos Bytes!"
