@@ -60,7 +60,9 @@ class ConfiguracaoService {
       throw new Error("Falha! Rota já cadastrada!");
     }
 
-    await config.save();
+    await Database.transaction(async trx => {
+      await config.save(trx);
+    });
 
     return config;
   }

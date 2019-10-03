@@ -19,6 +19,10 @@ class LogService {
 
       const params = request.all();
 
+      console.log({
+        rota: params.rota
+      });
+
       if (params.request) {
         const tamanho = Util.getBinarySize(params.request);
         if (tamanho > 1000000) {
@@ -62,13 +66,12 @@ class LogService {
         }
       }
 
+      const config = await this.getConfig(trilha);
+      if (config && !config.logar) {
+        return;
+      }
+
       await Database.transaction(async trx => {
-        const config = await this.getConfig(trilha);
-
-        if (config && !config.logar) {
-          return;
-        }
-
         await trilha.save(trx);
 
         await this.salvarRequest({
