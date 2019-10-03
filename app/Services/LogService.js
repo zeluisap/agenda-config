@@ -19,18 +19,15 @@ class LogService {
 
       const params = request.all();
 
-      // let log = {
-      //   rota: params.rota,
-      //   request: params.request
-      // };
-
-      // if (params.sessao && params.sessao.pessoa && params.sessao.pessoa.nome) {
-      //   log.usuario = params.sessao.pessoa.nome;
-      // }
-
-      // console.log({
-      //   log
-      // });
+      if (params.request) {
+        const tamanho = Util.getBinarySize(params.request);
+        if (tamanho > 1000000) {
+          console.log({
+            request: params.request,
+            erro: "Muitos Bytes!"
+          });
+        }
+      }
 
       const trilha = new Trilha();
 

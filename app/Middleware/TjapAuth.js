@@ -54,23 +54,23 @@ class TjapAuth {
     return null;
   }
 
-  async usuario(request) {
-    const token = this.getToken(request);
+  // async usuario(request) {
+  //   const token = this.getToken(request);
 
-    if (!token) {
-      return null;
-    }
+  //   if (!token) {
+  //     return null;
+  //   }
 
-    const resposta = await axios.post("/publico/restaurar-sessao", {
-      token
-    });
+  //   const resposta = await axios.post("/publico/restaurar-sessao", {
+  //     token
+  //   });
 
-    if (!(resposta && resposta.data && resposta.data.dados)) {
-      return null;
-    }
+  //   if (!(resposta && resposta.data && resposta.data.dados)) {
+  //     return null;
+  //   }
 
-    return resposta.data.dados;
-  }
+  //   return resposta.data.dados;
+  // }
 }
 
 module.exports = TjapAuth;

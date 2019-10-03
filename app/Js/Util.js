@@ -33,7 +33,12 @@ class Util {
     }
 
     const filters = [
-      'rota', 'ip','pessoa', 'especialidade', 'data_inicio', 'data_fim'
+      "rota",
+      "ip",
+      "pessoa",
+      "especialidade",
+      "data_inicio",
+      "data_fim"
     ];
 
     let retorno = [];
@@ -78,7 +83,6 @@ class Util {
 
   static getMoment(strDateTime) {
     try {
-
       strDateTime = this.getStringDate(strDateTime);
 
       if (!strDateTime) {
@@ -86,7 +90,6 @@ class Util {
       }
 
       return moment(strDateTime);
-
     } catch (error) {
       console.error({
         strDateTime,
@@ -97,7 +100,6 @@ class Util {
   }
 
   static getStringDate(strDateTime) {
-
     try {
       if (!(strDateTime && strDateTime.trim())) {
         return null;
@@ -148,7 +150,14 @@ class Util {
     } catch (error) {
       return null;
     }
+  }
 
+  static getBinarySize(obj_or_string) {
+    if (typeof obj_or_string === "object") {
+      obj_or_string = JSON.stringify(obj_or_string);
+    }
+
+    return Buffer.byteLength(obj_or_string, "utf8");
   }
 }
 
