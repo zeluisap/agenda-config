@@ -227,7 +227,7 @@ class LogService {
   }
 
   static async salvarResponse({ response, trilha, trx, config, namespace }) {
-    if (!trilha.sucesso || (config && !config.logar_resposta)) {
+    if (config && !config.logar_resposta && trilha.sucesso) {
       return null;
     }
 
