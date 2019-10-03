@@ -19,10 +19,6 @@ class LogService {
 
       const params = request.all();
 
-      console.log({
-        rota: params.rota
-      });
-
       if (params.request) {
         const tamanho = Util.getBinarySize(params.request);
         if (tamanho > 1000000) {
@@ -81,7 +77,7 @@ class LogService {
           config
         });
 
-        if (config.logar_resposta) {
+        if (config.logar_resposta || !trilha.sucesso) {
           await this.salvarResponse({
             response: params.response,
             trilha,
