@@ -404,7 +404,7 @@ class LogService {
       .orderBy("chave")
       .fetch();
 
-    obj.config = await obj.getConfig({
+    obj.config = await this.getConfig({
       rota: obj.rota
     });
 
