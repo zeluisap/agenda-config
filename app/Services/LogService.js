@@ -18,17 +18,6 @@ class LogService {
       const { request } = ctx;
 
       const params = request.all();
-
-      if (params.request) {
-        const tamanho = Util.getBinarySize(params.request);
-        if (tamanho > 10000) {
-          console.log({
-            request: params.request,
-            erro: "Muitos Bytes!"
-          });
-        }
-      }
-
       const trilha = new Trilha();
 
       const dataInicio = Util.getStringDate(params.request_inicio);
@@ -71,6 +60,17 @@ class LogService {
       const config = await this.getConfig(trilha);
       if (config && !config.logar) {
         return;
+      }
+
+      if (params.request) {
+        const tamanho = Util.getBinarySize(params.request);
+        if (tamanho > 100000) {
+          console.log({
+            request: params.request,
+            rota: trilha.rota,
+            erro: "Muitos Bytes!"
+          });
+        }
       }
 
       await Database.transaction(async trx => {
