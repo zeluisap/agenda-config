@@ -18,6 +18,7 @@ class LogService {
       const { request } = ctx;
 
       const params = request.all();
+
       const trilha = new Trilha();
 
       const dataInicio = Util.getStringDate(params.request_inicio);
@@ -64,7 +65,7 @@ class LogService {
 
       if (params.request) {
         const tamanho = Util.getBinarySize(params.request);
-        if (tamanho > 100000) {
+        if (tamanho > 10000) {
           console.log({
             request: params.request,
             rota: trilha.rota,
@@ -386,7 +387,7 @@ class LogService {
         }
       })
       .orderBy(order_key, order_reverse)
-      .on("query", console.log)
+      //      .on("query", console.log)
       .paginate(page, perPage);
   }
 
