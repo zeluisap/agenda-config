@@ -57,8 +57,14 @@ class LogService {
           trilha.pessoa = sessao.pessoa.nome;
         }
 
-        if (sessao.especialidade && sessao.especialidade.tipo_especialidade) {
-          trilha.especialidade = sessao.especialidade.tipo_especialidade;
+        if (sessao.especialidade) {
+          if (sessao.especialidade.matricula) {
+            trilha.matricula = sessao.especialidade.matricula;
+          }
+
+          if (sessao.especialidade.tipo_especialidade) {
+            trilha.especialidade = sessao.especialidade.tipo_especialidade;
+          }
         }
       }
 
@@ -320,7 +326,8 @@ class LogService {
       data_ini,
       data_fim,
       texto,
-      status
+      status,
+      matricula
     } = ctx.request.all();
     if (!order_key) {
       order_key = "data_request";
@@ -356,13 +363,20 @@ class LogService {
           );
         }
 
+        if (matricula) {
+          this.whereRaw(
+            "upper(matricula) = upper(?) ",
+            matricula.toUpperCase()
+          );
+        }
+
         if (data_ini && data_fim) {
           this.whereRaw("data_request between ? and ?", [data_ini, data_fim]);
         }
 
         if (texto) {
           this.whereRaw(
-            "upper(rota) ||' '|| upper(especialidade) ||' '|| upper(pessoa) ||' '|| TO_CHAR(data_request, 'dd/mm/yyyy') LIKE '%' || upper(?) || '%' ",
+            "upper(matricula) || ' ' || upper(rota) ||' '|| upper(especialidade) ||' '|| upper(pessoa) ||' '|| TO_CHAR(data_request, 'dd/mm/yyyy') LIKE '%' || upper(?) || '%' ",
             texto.toUpperCase()
           );
         }
