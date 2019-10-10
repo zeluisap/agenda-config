@@ -14,10 +14,10 @@ class TjapAuth {
   async handle(ctx, next) {
     const { request } = ctx;
 
-    // const auth = await this.usuario(request);
-    // if (auth) {
-    //   ctx.tjapauth = auth;
-    // }
+    const auth = await this.usuario(request);
+    if (auth) {
+      ctx.tjap_auth = auth;
+    }
 
     await next();
   }
@@ -30,10 +30,10 @@ class TjapAuth {
   async wsHandle(ctx, next) {
     const { request } = ctx;
 
-    // const auth = await this.usuario(request);
-    // if (auth) {
-    //   ctx.tjapauth = auth;
-    // }
+    const auth = await this.usuario(request);
+    if (auth) {
+      ctx.tjap_auth = auth;
+    }
 
     await next();
   }
@@ -54,23 +54,23 @@ class TjapAuth {
     return null;
   }
 
-  // async usuario(request) {
-  //   const token = this.getToken(request);
+  async usuario(request) {
+    const token = this.getToken(request);
 
-  //   if (!token) {
-  //     return null;
-  //   }
+    if (!token) {
+      return null;
+    }
 
-  //   const resposta = await axios.post("/publico/restaurar-sessao", {
-  //     token
-  //   });
+    const resposta = await axios.post("/publico/restaurar-sessao", {
+      token
+    });
 
-  //   if (!(resposta && resposta.data && resposta.data.dados)) {
-  //     return null;
-  //   }
+    if (!(resposta && resposta.data && resposta.data.dados)) {
+      return null;
+    }
 
-  //   return resposta.data.dados;
-  // }
+    return resposta.data.dados;
+  }
 }
 
 module.exports = TjapAuth;

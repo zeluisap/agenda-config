@@ -11,7 +11,7 @@ class TjapAuthRequired {
    */
   async handle({ request, response, tjapauth }, next) {
     if (!tjapauth) {
-      //return response.status(301).send("Falha ao Autenticar!");
+      return response.status(301).send("Falha ao Autenticar!");
     }
 
     await next();
@@ -24,7 +24,7 @@ class TjapAuthRequired {
    */
   async wsHandle({ request, tjapauth }, next) {
     if (!tjapauth) {
-      // throw new Error("Falha ao Autenticar!");
+      throw new Error("Falha ao Autenticar!");
     }
 
     await next();
