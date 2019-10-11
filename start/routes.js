@@ -16,12 +16,7 @@
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use("Route");
 
-Route.post("/upload", "UploadController.store").middleware(["tjap_auth"]);
-Route.get("/upload/:id", "UploadController.get").middleware(["tjap_auth"]);
-Route.delete("/upload/:id", "UploadController.delete").middleware([
-  "tjap_auth"
+Route.resource("/agenda-config", "AgendaController").middleware([
+  "tjap_auth",
+  "tjap_auth_required"
 ]);
-Route.get("/download/:id", "UploadController.download").middleware([
-  "tjap_auth"
-]);
-Route.post("/agenda", "UploadController.agenda").middleware([]);

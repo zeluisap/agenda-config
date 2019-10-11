@@ -9,9 +9,9 @@ class TjapAuthRequired {
    * @param {Request} ctx.request
    * @param {Function} next
    */
-  async handle({ request, response, tjapauth }, next) {
-    if (!tjapauth) {
-      return response.status(301).send("Falha ao Autenticar!");
+  async handle({ request, response, tjap_auth }, next) {
+    if (!tjap_auth) {
+      return response.unauthorized("Falha ao Autenticar!");
     }
 
     await next();
@@ -22,8 +22,8 @@ class TjapAuthRequired {
    * @param {Request} ctx.request
    * @param {Function} next
    */
-  async wsHandle({ request, tjapauth }, next) {
-    if (!tjapauth) {
+  async wsHandle({ request, tjap_auth }, next) {
+    if (!tjap_auth) {
       throw new Error("Falha ao Autenticar!");
     }
 
