@@ -1,8 +1,10 @@
-'use strict'
+"use strict";
 
-const BaseExceptionHandler = use('BaseExceptionHandler')
+const BaseExceptionHandler = use("BaseExceptionHandler");
 const Env = use("Env");
 const Youch = use("youch");
+
+const TjapException = use("App/Exceptions/TjapException");
 
 /**
  * This class handles all exceptions thrown during
@@ -22,14 +24,24 @@ class ExceptionHandler extends BaseExceptionHandler {
    *
    * @return {void}
    */
-  async handle (error, { request, response }) {
+  async handle(error, { request, response }) {
     if (Env.get("NODE_ENV") === "development") {
       const youch = new Youch(error, request.request);
       const errorJson = await youch.toJSON();
       return response.status(error.status).send(errorJson);
     }
 
-    return error.status(error.status);
+    let errorMessage = "Erro interno do servidor, avise o administrador!";
+
+    if (error instanceof TjapException) {
+      errorMessage = error.message;
+    }
+
+    return response.status(error.status).send({
+      error: {
+        message: errorMessage
+      }
+    });
   }
 
   /**
@@ -42,8 +54,7 @@ class ExceptionHandler extends BaseExceptionHandler {
    *
    * @return {void}
    */
-  async report (error, { request }) {
-  }
+  async report(error, { request }) {}
 }
 
-module.exports = ExceptionHandler
+module.exports = ExceptionHandler;
