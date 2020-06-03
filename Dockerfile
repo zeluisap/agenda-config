@@ -1,10 +1,10 @@
 FROM node:11
 
-COPY . /app
+# COPY . /app
 
 WORKDIR /app
 
 RUN npm install -g @adonisjs/cli
-RUN npm install
+# RUN npm install
 
 CMD ["adonis", "serve", "--dev"]
