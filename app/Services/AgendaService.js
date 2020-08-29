@@ -2,7 +2,8 @@
 
 const Database = use("Database");
 const Helpers = use("Helpers");
-const Agendamento = use("App/Models/Agendamento");
+// const Agendamento = use("App/Models/Agendamento");
+const Agenda = use("App/Models/Agenda");
 
 const moment = require("moment");
 
@@ -12,9 +13,8 @@ class AgendaService {
 
     const params = request.all();
 
-    let obj = new Agendamento();
-
-    if (params.id && !isNaN(params.id)) {
+    let obj = new Agenda();
+    if (params.id) {
       obj = await this.getPorId(params.id);
     }
 
@@ -34,13 +34,13 @@ class AgendaService {
       obj.ativo = params.ativo;
     }
 
-    const erros = await obj.erros();
+    // const erros = await obj.erros();
 
-    if (erros && erros.length) {
-      return response.status(400).send({
-        erros
-      });
-    }
+    // if (erros && erros.length) {
+    //   return response.status(400).send({
+    //     erros,
+    //   });
+    // }
 
     await obj.save();
 
@@ -82,14 +82,19 @@ class AgendaService {
       return null;
     }
 
-    return await Agendamento.query()
-      .where("id", "=", id)
-      .on("query", console.log)
-      .first();
+    // return await Agendamento.query()
+    //   .where("id", "=", id)
+    //   .on("query", console.log)
+    //   .first();
+
+    return await Agenda.findOne({
+      _id: id,
+    });
   }
 
   static async listar(ctx) {
-    return await Agendamento.all();
+    // return await Agendamento.all();
+    return await Agenda.find();
   }
 }
 

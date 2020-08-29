@@ -17,7 +17,8 @@ const providers = [
   "@adonisjs/cors/providers/CorsProvider",
   "@adonisjs/lucid/providers/LucidProvider",
   "@adonisjs/websocket/providers/WsProvider",
-  "@adonisjs/drive/providers/DriveProvider"
+  "@adonisjs/drive/providers/DriveProvider",
+  "adonis-mongoose-model/providers/MongooseProvider",
 ];
 
 /*

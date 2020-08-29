@@ -16,7 +16,4 @@
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use("Route");
 
-Route.resource("/", "AgendaController").middleware([
-  "tjap_auth",
-  "tjap_auth_required"
-]);
+Route.resource("/", "AgendaController").middleware([]);
