@@ -30,7 +30,7 @@
     "adonis-mongoose-model": "^3.2.0",
     "adonis-validation-provider": "^3.0.5",
     "axios": "^0.19.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "moment": "^2.24.0",
     "mongo": "^0.1.0",
     "mongoose": "^5.9.24",
